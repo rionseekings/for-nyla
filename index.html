@@ -38,6 +38,82 @@
             }
         }
 
+        /* Password Screen Styles */
+        #password-screen {
+            display: block;
+        }
+
+        #main-content {
+            display: none;
+        }
+
+        .lock-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        .password-title {
+            font-size: 2em;
+            color: #e63946;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+
+        .hint {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .password-input {
+            width: 100%;
+            max-width: 300px;
+            padding: 15px;
+            font-size: 1.1em;
+            border: 2px solid #ff006e;
+            border-radius: 10px;
+            text-align: center;
+            font-family: 'Georgia', serif;
+            margin-bottom: 20px;
+            background: white;
+        }
+
+        .password-input:focus {
+            outline: none;
+            border-color: #e63946;
+            box-shadow: 0 0 10px rgba(255, 0, 110, 0.3);
+        }
+
+        .submit-btn {
+            padding: 12px 40px;
+            font-size: 1.1em;
+            background: linear-gradient(135deg, #ff006e, #e63946);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: 'Georgia', serif;
+            transition: transform 0.2s;
+        }
+
+        .submit-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .error-message {
+            color: #e63946;
+            margin-top: 15px;
+            font-size: 0.9em;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .error-message.show {
+            opacity: 1;
+        }
+
+        /* Main Content Styles */
         .heart {
             font-size: 80px;
             animation: heartbeat 1.5s infinite;
@@ -165,7 +241,19 @@
         <div class="floating-heart">💕</div>
     </div>
 
-    <div class="container">
+    <!-- Password Screen -->
+    <div id="password-screen" class="container">
+        <div class="lock-icon">🔒</div>
+        <div class="password-title">You've Got Mail 💌</div>
+        <div class="hint">What's our anniversary?</div>
+        <input type="text" id="password-input" class="password-input" placeholder="MM/DD/YY">
+        <br>
+        <button onclick="checkPassword()" class="submit-btn">Unlock</button>
+        <div id="error-message" class="error-message">Try again! Think back to our special day 💕</div>
+    </div>
+
+    <!-- Main Valentine's Content -->
+    <div id="main-content" class="container">
         <img src="us.JPG" alt="Us" class="heart photo">
         
         <h1>Hey Nyla,</h1>
@@ -188,5 +276,53 @@
 
         
     </div>
+
+    <script>
+        // Allow Enter key to submit
+        document.getElementById('password-input').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                checkPassword();
+            }
+        });
+
+        function checkPassword() {
+            const input = document.getElementById('password-input').value;
+            const correctPassword = '06/01/25';
+            
+            if (input === correctPassword) {
+                // Hide password screen
+                document.getElementById('password-screen').style.display = 'none';
+                // Show main content
+                document.getElementById('main-content').style.display = 'block';
+            } else {
+                // Show error message
+                const errorMsg = document.getElementById('error-message');
+                errorMsg.classList.add('show');
+                
+                // Shake the input
+                const inputField = document.getElementById('password-input');
+                inputField.style.animation = 'shake 0.5s';
+                setTimeout(() => {
+                    inputField.style.animation = '';
+                }, 500);
+                
+                // Hide error after 3 seconds
+                setTimeout(() => {
+                    errorMsg.classList.remove('show');
+                }, 3000);
+            }
+        }
+
+        // Add shake animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-10px); }
+                75% { transform: translateX(10px); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
 </body>
 </html>
